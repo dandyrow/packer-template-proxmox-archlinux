@@ -1,5 +1,6 @@
 build {
-    sources = {
+    name = "Proxmox Arch Linux"
+    sources = [
         "source.proxmox.archlinux"
-    }
+    ]
 }

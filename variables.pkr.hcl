@@ -41,7 +41,7 @@ variable "storage_pool_type" {
   default = "lvm"
 
   validation {
-    condition     = contains(["lvm", "lvm-thin", "zfspool", "cephfs", "rbd", "directory"], var.disk_storage_pool_type)
+    condition     = contains(["lvm", "lvm-thin", "zfspool", "cephfs", "rbd", "directory"], var.storage_pool_type)
     error_message = "The storage pool type must be either 'lvm', 'lvm-thin', 'zfspool', 'cephfs', 'rbd', or 'directory'."
   }
 }
@@ -52,7 +52,7 @@ variable "ssh_username" {
 }
 
 variable "ssh_public_key" {
-  type        = list
+  type        = list(string)
   description = "SSH public keys to use to SSH into the created VM"
 }
 
