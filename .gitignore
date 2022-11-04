@@ -9,3 +9,4 @@ crash.log
 
 http/meta-data
 http/user-data
+secrets.pkrvar.hcl

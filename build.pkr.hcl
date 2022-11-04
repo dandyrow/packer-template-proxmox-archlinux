@@ -1,5 +1,5 @@
 build {
     sources = {
-        "source.proxmox.os name"
+        "source.proxmox.archlinux"
     }
 }
