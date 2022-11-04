@@ -17,6 +17,7 @@ variable "proxmox_api_password" {
 variable "proxmox_api_token_secret" {
   type        = string
   description = "Token for authenticating API calls. Set to null and fill in proxmox_password if using a password"
+  default     = null
 }
 
 variable "proxmox_node" {

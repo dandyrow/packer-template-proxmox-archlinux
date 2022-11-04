@@ -13,7 +13,7 @@ source "proxmox" "archlinux" {
 
   # VM config settings
   vm_id                = 900
-  vm_name              = "Arch Linux"
+  vm_name              = "archlinux"
   template_description = "Base install of arch linux with vim, doas, qemu-guest-agent, and sane security defaults setup"
   os                   = "l26"
   unmount_iso          = true
