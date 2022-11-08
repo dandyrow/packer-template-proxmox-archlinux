@@ -1,6 +1,9 @@
 build {
-    name = "Proxmox Arch Linux"
-    sources = [
-        "source.proxmox.archlinux"
-    ]
+  name = "Proxmox Arch Linux"
+  sources = [
+    "source.proxmox.archlinux"
+  ]
+  provisioner "ansible" {
+
+  }
 }

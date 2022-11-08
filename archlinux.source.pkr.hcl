@@ -1,3 +1,5 @@
+data "sshkey" "archlinux" {}
+
 source "proxmox" "archlinux" {
   # Proxmox host specific settings
   proxmox_url = "https://${var.proxmox_host}/api2/json"
@@ -10,13 +12,24 @@ source "proxmox" "archlinux" {
   iso_url          = "https://mirror.rackspace.com/archlinux/iso/latest/archlinux-x86_64.iso"
   iso_storage_pool = var.iso_storage_pool
   iso_checksum     = "sha256:df6749df55b02cec98e5a9177c7957acfb96fe14d04553b6e4714100a4824f68" # If downloading should be updated to latest before running packer build
+  unmount_iso      = true
+
+  additional_iso_files {
+    device           = "scsi5"
+    iso_storage_pool = var.iso_storage_pool
+    unmount          = true
+    cd_content = {
+      meta-data = jsonencode("")
+      user-data = templatefile("${path.root}/templates/user-data.pkrtpl", { ssh_public_key = data.sshkey.archlinux.public_key })
+    }
+    cd_label = "cidata"
+  }
 
   # VM config settings
   vm_id                = 900
   vm_name              = "archlinux"
   template_description = "Base install of arch linux with vim, doas, qemu-guest-agent, and sane security defaults setup"
   os                   = "l26"
-  unmount_iso          = true
   qemu_agent           = true
 
   # VM hardware settings
@@ -49,7 +62,8 @@ source "proxmox" "archlinux" {
   cloud_init              = true
   cloud_init_storage_pool = var.storage_pool
 
-  # Packer provisioner settings
-  http_directory = "./http"
-  ssh_username   = var.ssh_username
+  # Packer ssh settings
+  ssh_username              = "root"
+  ssh_private_key_file      = data.sshkey.archlinux.private_key_path
+  ssh_clear_authorized_keys = true
 }
