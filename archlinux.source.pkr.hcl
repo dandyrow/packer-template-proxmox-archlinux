@@ -2,11 +2,12 @@ data "sshkey" "archlinux" {}
 
 source "proxmox" "archlinux" {
   # Proxmox host specific settings
-  proxmox_url = "https://${var.proxmox_host}/api2/json"
-  username    = var.proxmox_api_token_id
-  password    = local.use_password ? var.proxmox_api_password : null
-  token       = local.use_password ? null : var.proxmox_api_token_secret
-  node        = var.proxmox_node
+  proxmox_url              = "https://${var.proxmox_host}/api2/json"
+  insecure_skip_tls_verify = var.skip_tls
+  username                 = var.proxmox_api_token_id
+  password                 = local.use_password ? var.proxmox_api_password : null
+  token                    = local.use_password ? null : var.proxmox_api_token_secret
+  node                     = var.proxmox_node
 
   # ISO settings
   iso_url          = "https://mirror.rackspace.com/archlinux/iso/latest/archlinux-x86_64.iso"
@@ -52,9 +53,17 @@ source "proxmox" "archlinux" {
   scsi_controller = "virtio-scsi-pci"
   efidisk         = var.storage_pool
 
+  # EFI boot partition
   disks {
     type              = "virtio"
-    disk_size         = "10G"
+    disk_size         = "150M"
+    storage_pool      = var.storage_pool
+    storage_pool_type = var.storage_pool_type
+  }
+
+  disks {
+    type              = "virtio"
+    disk_size         = "20G"
     storage_pool      = var.storage_pool
     storage_pool_type = var.storage_pool_type
   }
