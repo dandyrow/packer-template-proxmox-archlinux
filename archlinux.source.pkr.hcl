@@ -12,7 +12,7 @@ source "proxmox" "archlinux" {
   # ISO settings
   iso_url          = "https://mirror.rackspace.com/archlinux/iso/latest/archlinux-x86_64.iso"
   iso_storage_pool = var.iso_storage_pool
-  iso_checksum     = "sha256:df6749df55b02cec98e5a9177c7957acfb96fe14d04553b6e4714100a4824f68" # If downloading should be updated to latest before running packer build
+  iso_checksum     = "sha256:de301b9f18973e5902b47bb00380732af38d8ca70084b573ae7cf36a818eb84c" # If downloading should be updated to latest before running packer build
   unmount_iso      = true
 
   additional_iso_files {
@@ -56,14 +56,14 @@ source "proxmox" "archlinux" {
   # EFI boot partition
   disks {
     type              = "virtio"
-    disk_size         = "150M"
+    disk_size         = "100M"
     storage_pool      = var.storage_pool
     storage_pool_type = var.storage_pool_type
   }
 
   disks {
     type              = "virtio"
-    disk_size         = "20G"
+    disk_size         = "10G"
     storage_pool      = var.storage_pool
     storage_pool_type = var.storage_pool_type
   }
@@ -72,7 +72,7 @@ source "proxmox" "archlinux" {
   cloud_init_storage_pool = var.storage_pool
 
   # Packer ssh settings
-  ssh_username              = "root"
+  ssh_username              = "arch"
   ssh_private_key_file      = data.sshkey.archlinux.private_key_path
   ssh_clear_authorized_keys = true
 }
