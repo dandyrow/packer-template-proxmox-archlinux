@@ -1,0 +1,19 @@
+---
+- name: Install Arch
+  hosts: default
+  become: true
+  roles:
+    - role: archlinux
+      vars:
+        extra_packages:
+          - vim
+          - sl
+          - cloud-init
+          - cloud-guest-utils
+          - qemu-guest-agent
+          - openssh
+        arch_root: /mnt
+        region: Europe
+        city: London
+        locale: en_GB.UTF8
+        character_set: UTF-8
