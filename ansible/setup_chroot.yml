@@ -1,0 +1,47 @@
+---
+- name: Mount proc in arch root
+  ansible.posix.mount:
+    src: /proc
+    path: /mnt/proc/
+    fstype: proc
+    state: mounted
+
+- name: Mount sysfs in arch root
+  ansible.posix.mount:
+    src: /sys
+    path: /mnt/sys/
+    fstype: sysfs
+    state: mounted
+
+- name: Mount dev in arch root
+  ansible.posix.mount:
+    src: /dev
+    path: /mnt/dev/
+    fstype: none
+    opts: rbind
+    state: mounted
+
+- name: Mount run in arch root
+  ansible.posix.mount:
+    src: /run
+    path: /mnt/run/
+    fstype: none
+    opts: rbind
+    state: mounted
+
+- name: Mount efivars in arch root
+  ansible.posix.mount:
+    src: /sys/firmware/efi/efivars
+    path: /mnt/sys/firmware/efi/efivars/
+    fstype: none
+    opts: rbind
+    state: mounted
+
+- name: Copy resolv.conf from archiso to arch root
+  ansible.builtin.copy:
+    src: /etc/resolv.conf
+    dest: /mnt/etc/resolv.conf
+    remote_src: true
+    owner: root
+    group: root
+    mode: '0644'

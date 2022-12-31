@@ -1,0 +1,55 @@
+---
+- name: Install Arch
+  hosts: default
+  become: true
+
+  vars:
+    extra_packages:
+      - vim
+      - sl
+      - qemu-guest-agent
+      - openssh
+      - ansible
+    root_partition: /dev/vdb
+    root_drive: /dev/vdb
+    boot_partition: /dev/vda1
+    boot_drive: /dev/vda
+
+  tasks:
+    - name: Setup filesystems on disks to install arch to
+      ansible.builtin.include_tasks: "setup_filesystem.yml"
+
+    - name: Pause for a minute to allow pacman to finish initialising
+      ansible.builtin.pause:
+        seconds: 60
+
+    - name: Update arch linux keyring
+      community.general.pacman:
+        name: archlinux-keyring
+        update_cache: true
+        state: latest
+
+    - name: Run pacstrap to install arch
+      ansible.builtin.command: pacstrap -K /mnt base linux linux-firmware {{ extra_packages | join(' ') }}
+      changed_when: false
+
+    - name: Generate fstab
+      ansible.builtin.command: genfstab -U /mnt >> /mnt/etc/fstab
+      changed_when: false
+
+    - name: Copy config playbook to archiso
+      ansible.builtin.copy:
+        src: config_playbook
+        dest: /tmp/
+        owner: root
+        group: root
+        mode: "0755"
+        directory_mode: "0755"
+
+    - name: Install ansible on archiso
+      ansible.builtin.package:
+        name: ansible-core
+        state: present
+
+    - name: Setup chroot environment
+      ansible.builtin.include_tasks: setup_chroot.yml

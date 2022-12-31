@@ -1,0 +1,8 @@
+---
+- name: Configure a fresh arch install
+  hosts: arch_root
+  connection: chroot
+  become: true
+  roles:
+    - role: dandyrow.config_arch
+      

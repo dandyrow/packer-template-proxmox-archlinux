@@ -1,0 +1,42 @@
+---
+- name: Create root filesystem
+  community.general.filesystem:
+    dev: "{{ root_partition }}"
+    fstype: ext4
+    state: present
+
+- name: Mount root filesystem
+  ansible.posix.mount:
+    path: /mnt
+    src: "{{ root_partition }}"
+    fstype: ext4
+    state: mounted
+
+- name: Create boot folder in root filesystem
+  ansible.builtin.file:
+    path: /mnt/boot
+    mode: '0755'
+    state: directory
+
+- name: Create boot partition
+  community.general.parted:
+    device: "{{ boot_drive }}"
+    number: 1
+    fs_type: fat32
+    flags: [esp]
+    label: gpt
+    state: present
+
+- name: Create boot filesystem
+  community.general.filesystem:
+    dev: "{{ boot_partition }}"
+    fstype: vfat
+    opts: -F 32
+    state: present
+
+- name: Mount boot filesystem
+  ansible.posix.mount:
+    path: /mnt/boot
+    src: "{{ boot_partition }}"
+    fstype: vfat
+    state: mounted
